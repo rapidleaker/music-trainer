@@ -1,0 +1,385 @@
+* { box-sizing: border-box; }
+
+:root {
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif;
+  color: #17212b;
+  background: #f4f7f8;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fbfcfc 0%, #f3f6f7 100%);
+}
+
+.app {
+  width: min(1180px, 96%);
+  padding-top: max(24px, var(--safe-top));
+  margin: 0 auto;
+  padding: 0 0 max(30px, var(--safe-bottom));
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.brand-icon {
+  font-family: "Times New Roman", serif;
+  font-size: 64px;
+  line-height: .8;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: clamp(26px, 3vw, 38px);
+  letter-spacing: -.8px;
+}
+
+.brand p {
+  margin: 5px 0 0;
+  font-size: 18px;
+  color: #63717c;
+}
+
+.header-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(105px, 1fr));
+  gap: 12px;
+}
+
+.stat-box {
+  min-width: 110px;
+  padding: 9px 14px;
+  border: 1px solid #e1e6e9;
+  border-radius: 14px;
+  background: rgba(255,255,255,.9);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 8px rgba(20,35,45,.04);
+}
+
+.stat-icon {
+  font-size: 25px;
+}
+
+.stat-box small {
+  display: block;
+  color: #65727b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.stat-box strong {
+  display: block;
+  font-size: 23px;
+  line-height: 1.15;
+}
+
+.stat-box em {
+  font-size: 12px;
+  font-style: normal;
+}
+
+.green-line {
+  height: 3px;
+  margin: 18px 0 20px;
+  background: #1db978;
+}
+
+.quiz-card {
+  background: rgba(255,255,255,.96);
+  border: 1px solid #e3e7e9;
+  border-radius: 17px;
+  padding: 20px 28px 28px;
+  box-shadow: 0 5px 20px rgba(23,37,47,.08);
+  text-align: center;
+}
+
+.question-pill {
+  display: inline-block;
+  padding: 8px 22px;
+  border: 1px solid #e2e7ea;
+  border-radius: 999px;
+  background: #f7f9fa;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.quiz-card h2 {
+  margin: 13px 0 4px;
+  font-size: clamp(28px, 4vw, 40px);
+  letter-spacing: -.5px;
+}
+
+.subtitle {
+  margin: 0;
+  color: #66737d;
+  font-size: 18px;
+}
+
+.staff-wrap {
+  width: 100%;
+  margin: 10px auto 0;
+}
+
+#staff {
+  width: 100%;
+  display: block;
+}
+
+.staff-lines line {
+  stroke: #20282e;
+  stroke-width: 2;
+  shape-rendering: geometricPrecision;
+}
+
+.treble-clef {
+  font-family: "Bravura", "Noto Music", "Times New Roman", serif;
+  font-size: 112px;
+  fill: #151c21;
+}
+
+#ledgerLines line {
+  stroke: #20282e;
+  stroke-width: 2;
+}
+
+#noteHead {
+  fill: #11181d;
+  stroke: #11181d;
+  /* cy は noteY と完全に一致。 */
+}
+
+#stem {
+  stroke: #11181d;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.hint {
+  margin: 2px 0 17px;
+  color: #596873;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.answers {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 16px;
+}
+
+.answers button {
+  border: 1px solid #dfe5e8;
+  border-radius: 12px;
+  padding: 18px 5px;
+  background: #fafbfc;
+  color: #11181d;
+  font-size: 26px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform .12s, box-shadow .12s, background .15s;
+}
+
+.answers button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0,0,0,.08);
+}
+
+.answers button.correct {
+  background: #d8f6e5;
+  border-color: #53c98b;
+}
+
+.answers button.wrong {
+  background: #ffe0e0;
+  border-color: #ef7777;
+}
+
+.answers button:disabled {
+  cursor: default;
+}
+
+.feedback {
+  min-height: 34px;
+  padding: 12px 0 2px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.correct-text { color: #16844d; }
+.wrong-text { color: #bd302d; }
+
+.next-button {
+  width: 100%;
+  border: 0;
+  border-radius: 11px;
+  padding: 14px;
+  background: #17212b;
+  color: white;
+  font-size: 17px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.next-button:disabled {
+  opacity: .35;
+  cursor: default;
+}
+
+.bottom-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1.1fr;
+  align-items: stretch;
+  margin-top: 17px;
+  background: rgba(255,255,255,.96);
+  border: 1px solid #e3e7e9;
+  border-radius: 15px;
+  box-shadow: 0 3px 13px rgba(23,37,47,.06);
+  overflow: hidden;
+}
+
+.bottom-stat {
+  text-align: center;
+  padding: 16px 12px;
+  border-right: 1px solid #e2e6e8;
+}
+
+.bottom-stat span {
+  display: block;
+  color: #65727b;
+  font-weight: 700;
+}
+
+.bottom-stat strong {
+  display: block;
+  margin-top: 5px;
+  color: #0d9c62;
+  font-size: 24px;
+}
+
+.bottom-stat:nth-child(2) strong { color: #267fe0; }
+.bottom-stat:nth-child(3) strong { color: #e88908; }
+
+.giveup {
+  margin: 12px;
+  border: 1px solid #e1e6e9;
+  border-radius: 11px;
+  background: white;
+  color: #56636c;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.result-card {
+  margin-top: 18px;
+  padding: 38px 24px;
+  background: white;
+  border: 1px solid #e3e7e9;
+  border-radius: 17px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(23,37,47,.08);
+}
+
+.result-icon { font-size: 45px; }
+.result-card h2 { font-size: 30px; }
+.result-score { font-size: 58px; font-weight: 900; margin: 12px; }
+
+.hidden { display: none; }
+
+footer {
+  margin-top: 17px;
+  text-align: center;
+  color: #87939a;
+  font-size: 12px;
+}
+
+@media (max-width: 850px) {
+  .topbar { align-items: flex-start; flex-direction: column; }
+  .header-stats { width: 100%; }
+}
+
+@media (max-width: 620px) {
+  .app { width: 94%; padding-top: 14px; }
+  .brand-icon { font-size: 50px; }
+  .brand h1 { font-size: 25px; }
+  .brand p { font-size: 15px; }
+  .header-stats { grid-template-columns: repeat(2, 1fr); width: 100%; }
+  .stat-box { min-width: 0; }
+  .quiz-card { padding: 15px 10px 20px; }
+  .quiz-card h2 { font-size: 28px; }
+  .subtitle { font-size: 14px; }
+  .answers { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .answers button { font-size: 20px; padding: 13px 3px; }
+  .bottom-panel { grid-template-columns: repeat(3, 1fr); }
+  .giveup { grid-column: 1 / -1; padding: 12px; margin: 0 12px 12px; }
+  .bottom-stat:nth-child(3) { border-right: 0; }
+}
+
+
+/* iPhone: タップ操作を前提にボタンを少し大きくする */
+button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.answers button {
+  min-height: 58px;
+}
+
+.giveup {
+  min-height: 52px;
+}
+
+@media (max-width: 430px) {
+  .app {
+    width: 96%;
+  }
+
+  .header-stats {
+    gap: 7px;
+  }
+
+  .stat-box {
+    padding: 8px 7px;
+    gap: 6px;
+  }
+
+  .stat-icon {
+    font-size: 20px;
+  }
+
+  .stat-box strong {
+    font-size: 19px;
+  }
+
+  .quiz-card {
+    border-radius: 15px;
+  }
+
+  .staff-wrap {
+    margin-top: 4px;
+  }
+
+  .answers {
+    gap: 7px;
+  }
+
+  .answers button {
+    min-height: 54px;
+    font-size: 19px;
+  }
+}

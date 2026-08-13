@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#17212b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Music Trainer">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="manifest" href="manifest.json">
+  <title>Music Trainer - 音名トレーニング</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">𝄞</div>
+        <div>
+          <h1>Music Trainer</h1>
+          <p>音名トレーニング</p>
+        </div>
+      </div>
+
+      <div class="header-stats">
+        <div class="stat-box">
+          <span class="stat-icon">♛</span>
+          <div><small>レベル</small><strong id="level">1</strong></div>
+        </div>
+        <div class="stat-box">
+          <span class="stat-icon">🔥</span>
+          <div><small>コンボ</small><strong id="combo">0</strong></div>
+        </div>
+        <div class="stat-box">
+          <span class="stat-icon">🏆</span>
+          <div><small>スコア</small><strong id="score">0</strong></div>
+        </div>
+        <div class="stat-box timer-box">
+          <span class="stat-icon">◷</span>
+          <div><small>残り時間</small><strong><span id="timer">30</span><em> 秒</em></strong></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="green-line"></div>
+
+    <section class="quiz-card" id="quizCard">
+      <div class="question-pill">問題 <span id="questionNumber">1</span> / 10</div>
+      <h2>この音の名前は？</h2>
+      <p class="subtitle">五線譜の音符が表す音名を選んでください</p>
+
+      <div class="staff-wrap">
+        <svg id="staff" viewBox="0 0 900 260" aria-label="音符が表示される五線譜">
+          <g class="staff-lines">
+            <line x1="70" y1="65" x2="850" y2="65"/>
+            <line x1="70" y1="90" x2="850" y2="90"/>
+            <line x1="70" y1="115" x2="850" y2="115"/>
+            <line x1="70" y1="140" x2="850" y2="140"/>
+            <line x1="70" y1="165" x2="850" y2="165"/>
+          </g>
+
+          <text x="78" y="160" class="treble-clef">𝄞</text>
+
+          <g id="ledgerLines"></g>
+
+          <!-- noteHead の cy と stem の y1 を同じ noteY から計算する。
+               これにより黒い丸の中心と棒の接続位置がずれない。 -->
+          <ellipse id="noteHead" cx="485" cy="115" rx="19" ry="14"/>
+          <line id="stem" x1="502" y1="115" x2="502" y2="50"/>
+        </svg>
+      </div>
+
+      <div class="hint">♧　ド〜シの音名を選択してください</div>
+
+      <div id="answers" class="answers">
+        <button data-note="ド">ド</button>
+        <button data-note="レ">レ</button>
+        <button data-note="ミ">ミ</button>
+        <button data-note="ファ">ファ</button>
+        <button data-note="ソ">ソ</button>
+        <button data-note="ラ">ラ</button>
+        <button data-note="シ">シ</button>
+      </div>
+
+      <div id="feedback" class="feedback" aria-live="polite"></div>
+
+      <button id="nextButton" class="next-button" disabled>次の問題</button>
+    </section>
+
+    <section class="bottom-panel">
+      <div class="bottom-stat">
+        <span>正解数</span>
+        <strong><span id="correctCount">0</span> / <span id="answeredCount">0</span></strong>
+      </div>
+      <div class="bottom-stat">
+        <span>正答率</span>
+        <strong id="accuracy">0%</strong>
+      </div>
+      <div class="bottom-stat">
+        <span>ベストコンボ</span>
+        <strong id="bestCombo">0</strong>
+      </div>
+      <button id="giveUpButton" class="giveup">⚑ ギブアップ</button>
+    </section>
+
+    <section class="result-card hidden" id="resultCard">
+      <div class="result-icon">🎉</div>
+      <h2>トレーニング終了！</h2>
+      <div class="result-score"><span id="finalScore">0</span> 点</div>
+      <p>正解 <strong id="finalCorrect">0</strong> / 10　・　正答率 <strong id="finalAccuracy">0%</strong></p>
+      <p id="resultMessage"></p>
+      <button id="restartButton" class="next-button">もう一度挑戦</button>
+    </section>
+
+    <footer>Music Trainer Ver.1.1　—　五線譜を見て音名を素早く答える練習</footer>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js")
+          .catch(error => console.log("Service Worker registration failed:", error));
+      });
+    }
+  </script>
+</body>
+</html>
