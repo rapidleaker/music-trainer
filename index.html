@@ -2,128 +2,132 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#17212b">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#102a43">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Music Trainer">
-  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png">
   <link rel="manifest" href="manifest.json">
-  <title>Music Trainer - 音名トレーニング</title>
   <link rel="stylesheet" href="style.css">
+  <title>Music Trainer Ver.2.0</title>
 </head>
 <body>
-  <main class="app">
-    <header class="topbar">
-      <div class="brand">
-        <div class="brand-icon">𝄞</div>
-        <div>
-          <h1>Music Trainer</h1>
-          <p>音名トレーニング</p>
-        </div>
+  <header class="app-header">
+    <div class="brand"><span class="brand-icon">𝄞</span><span>Music Trainer</span></div>
+    <span class="version">Ver.2.0</span>
+  </header>
+
+  <main id="app">
+    <section id="home" class="screen">
+      <h1>トレーニングを選択</h1>
+      <div class="mode-grid">
+        <button class="mode-card" id="noteMode">
+          <span class="mode-symbol">♫</span>
+          <strong>音名トレーニング</strong>
+          <small>五線譜の音名を答えます</small>
+        </button>
+        <button class="mode-card" id="rhythmMode">
+          <span class="mode-symbol">♩</span>
+          <strong>リズムトレーニング</strong>
+          <small>リズムを見分け、タップします</small>
+        </button>
       </div>
-
-      <div class="header-stats">
-        <div class="stat-box">
-          <span class="stat-icon">♛</span>
-          <div><small>レベル</small><strong id="level">1</strong></div>
-        </div>
-        <div class="stat-box">
-          <span class="stat-icon">🔥</span>
-          <div><small>コンボ</small><strong id="combo">0</strong></div>
-        </div>
-        <div class="stat-box">
-          <span class="stat-icon">🏆</span>
-          <div><small>スコア</small><strong id="score">0</strong></div>
-        </div>
-        <div class="stat-box timer-box">
-          <span class="stat-icon">◷</span>
-          <div><small>残り時間</small><strong><span id="timer">30</span><em> 秒</em></strong></div>
-        </div>
-      </div>
-    </header>
-
-    <div class="green-line"></div>
-
-    <section class="quiz-card" id="quizCard">
-      <div class="question-pill">問題 <span id="questionNumber">1</span> / 10</div>
-      <h2>この音の名前は？</h2>
-      <p class="subtitle">五線譜の音符が表す音名を選んでください</p>
-
-      <div class="staff-wrap">
-        <svg id="staff" viewBox="0 0 900 260" aria-label="音符が表示される五線譜">
-          <g class="staff-lines">
-            <line x1="70" y1="65" x2="850" y2="65"/>
-            <line x1="70" y1="90" x2="850" y2="90"/>
-            <line x1="70" y1="115" x2="850" y2="115"/>
-            <line x1="70" y1="140" x2="850" y2="140"/>
-            <line x1="70" y1="165" x2="850" y2="165"/>
-          </g>
-
-          <text x="78" y="160" class="treble-clef">𝄞</text>
-
-          <g id="ledgerLines"></g>
-
-          <!-- noteHead の cy と stem の y1 を同じ noteY から計算する。
-               これにより黒い丸の中心と棒の接続位置がずれない。 -->
-          <ellipse id="noteHead" cx="485" cy="115" rx="19" ry="14"/>
-          <line id="stem" x1="502" y1="115" x2="502" y2="50"/>
-        </svg>
-      </div>
-
-      <div class="hint">♧　ド〜シの音名を選択してください</div>
-
-      <div id="answers" class="answers">
-        <button data-note="ド">ド</button>
-        <button data-note="レ">レ</button>
-        <button data-note="ミ">ミ</button>
-        <button data-note="ファ">ファ</button>
-        <button data-note="ソ">ソ</button>
-        <button data-note="ラ">ラ</button>
-        <button data-note="シ">シ</button>
-      </div>
-
-      <div id="feedback" class="feedback" aria-live="polite"></div>
-
-      <button id="nextButton" class="next-button" disabled>次の問題</button>
     </section>
 
-    <section class="bottom-panel">
-      <div class="bottom-stat">
-        <span>正解数</span>
-        <strong><span id="correctCount">0</span> / <span id="answeredCount">0</span></strong>
+    <section id="noteSetup" class="screen hidden">
+      <h1>音名トレーニング</h1>
+      <div class="card">
+        <label>音域
+          <select id="noteRange">
+            <option value="beginner">初級：中央ド〜シ</option>
+            <option value="intermediate">中級：低いド〜高いミ</option>
+            <option value="advanced">上級：低いラ〜高いソ</option>
+            <option value="custom">カスタム</option>
+          </select>
+        </label>
+        <div id="customRange" class="custom-range hidden">
+          <label>最低音<select id="customMin"></select></label>
+          <label>最高音<select id="customMax"></select></label>
+        </div>
+        <label>1問の制限時間
+          <select id="noteTime">
+            <option value="5">5秒</option>
+            <option value="10" selected>10秒</option>
+            <option value="15">15秒</option>
+          </select>
+        </label>
+        <button class="primary" id="startNote">開始</button>
+        <button class="secondary backHome">ホームへ戻る</button>
       </div>
-      <div class="bottom-stat">
-        <span>正答率</span>
-        <strong id="accuracy">0%</strong>
-      </div>
-      <div class="bottom-stat">
-        <span>ベストコンボ</span>
-        <strong id="bestCombo">0</strong>
-      </div>
-      <button id="giveUpButton" class="giveup">⚑ ギブアップ</button>
     </section>
 
-    <section class="result-card hidden" id="resultCard">
-      <div class="result-icon">🎉</div>
-      <h2>トレーニング終了！</h2>
-      <div class="result-score"><span id="finalScore">0</span> 点</div>
-      <p>正解 <strong id="finalCorrect">0</strong> / 10　・　正答率 <strong id="finalAccuracy">0%</strong></p>
-      <p id="resultMessage"></p>
-      <button id="restartButton" class="next-button">もう一度挑戦</button>
+    <section id="noteGame" class="screen hidden">
+      <div class="stats">
+        <span>問題 <b id="noteQuestion">1/10</b></span>
+        <span>コンボ <b id="noteCombo">0</b></span>
+        <span>スコア <b id="noteScore">0</b></span>
+        <span>残り <b id="noteRemain">10</b>秒</span>
+      </div>
+      <div class="card">
+        <svg id="staff" viewBox="0 0 600 260" aria-label="五線譜"></svg>
+        <div id="noteMessage" class="message"></div>
+        <div id="noteChoices" class="choice-grid"></div>
+        <button class="danger" id="giveUpNote">中断する</button>
+      </div>
     </section>
 
-    <footer>Music Trainer Ver.1.1　—　五線譜を見て音名を素早く答える練習</footer>
+    <section id="rhythmSetup" class="screen hidden">
+      <h1>リズムトレーニング</h1>
+      <div class="card">
+        <label>拍子
+          <select id="meter">
+            <option value="2">2/4</option>
+            <option value="3">3/4</option>
+            <option value="4" selected>4/4</option>
+          </select>
+        </label>
+        <label>難易度
+          <select id="rhythmLevel">
+            <option value="beginner">初級</option>
+            <option value="intermediate">中級</option>
+            <option value="advanced">上級</option>
+          </select>
+        </label>
+        <button class="primary" id="startRhythm">開始</button>
+        <button class="secondary backHome">ホームへ戻る</button>
+      </div>
+    </section>
+
+    <section id="rhythmGame" class="screen hidden">
+      <div class="stats">
+        <span>問題 <b id="rhythmQuestion">1/10</b></span>
+        <span>コンボ <b id="rhythmCombo">0</b></span>
+        <span>スコア <b id="rhythmScore">0</b></span>
+      </div>
+      <div class="card">
+        <svg id="rhythmStaff" viewBox="0 0 700 220"></svg>
+        <div id="rhythmChoices" class="rhythm-choices"></div>
+        <div id="rhythmMessage" class="message"></div>
+        <hr>
+        <h2>タップ練習</h2>
+        <p class="notice">判定は端末の処理遅延を含む練習用の目安です。</p>
+        <button class="primary" id="startTap">タップ練習開始</button>
+        <div id="countdown" class="countdown"></div>
+        <button id="tapButton" class="tap-button hidden">TAP</button>
+        <div id="tapResult"></div>
+        <button class="danger" id="giveUpRhythm">中断する</button>
+      </div>
+    </section>
+
+    <section id="result" class="screen hidden">
+      <div class="card result-card">
+        <h1 id="resultTitle">結果</h1>
+        <div id="resultText"></div>
+        <button class="primary" id="restart">もう一度</button>
+        <button class="secondary backHome">ホームへ戻る</button>
+      </div>
+    </section>
   </main>
-
   <script src="script.js"></script>
-  <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./service-worker.js")
-          .catch(error => console.log("Service Worker registration failed:", error));
-      });
-    }
-  </script>
 </body>
 </html>
