@@ -29,33 +29,34 @@ document.addEventListener("DOMContentLoaded", function () {
    9音上がった位置に中央ドを配置します。
 */
 const notes = [
-  {name:"ラ", octave:2, step:-5},
-  {name:"シ", octave:2, step:-4},
-  {name:"ド", octave:3, step:-3},
-  {name:"レ", octave:3, step:-2},
-  {name:"ミ", octave:3, step:-1},
-  {name:"ファ",octave:3, step:0},
-  {name:"ソ", octave:3, step:1},
-  {name:"ラ", octave:3, step:2},
-  {name:"シ", octave:3, step:3},
-  {name:"ド", octave:4, step:4},
-  {name:"レ", octave:4, step:5},
-  {name:"ミ", octave:4, step:6},
-  {name:"ファ",octave:4, step:7},
-  {name:"ソ", octave:4, step:8},
-  {name:"ラ", octave:4, step:9},
-  {name:"シ", octave:4, step:10},
-  {name:"ド", octave:5, step:11},
-  {name:"レ", octave:5, step:12},
-  {name:"ミ", octave:5, step:13},
-  {name:"ファ",octave:5, step:14},
-  {name:"ソ", octave:5, step:15}
+  { name: "ド", octave: 3, step: -9 },
+  { name: "レ", octave: 3, step: -8 },
+  { name: "ミ", octave: 3, step: -7 },
+  { name: "ファ", octave: 3, step: -6 },
+  { name: "ソ", octave: 3, step: -5 },
+  { name: "ラ", octave: 3, step: -4 },
+  { name: "シ", octave: 3, step: -3 },
+
+  { name: "ド", octave: 4, step: -2 },
+  { name: "レ", octave: 4, step: -1 },
+  { name: "ミ", octave: 4, step: 0 },
+  { name: "ファ", octave: 4, step: 1 },
+  { name: "ソ", octave: 4, step: 2 },
+  { name: "ラ", octave: 4, step: 3 },
+  { name: "シ", octave: 4, step: 4 },
+
+  { name: "ド", octave: 5, step: 5 },
+  { name: "レ", octave: 5, step: 6 },
+  { name: "ミ", octave: 5, step: 7 },
+  { name: "ファ", octave: 5, step: 8 },
+  { name: "ソ", octave: 5, step: 9 }
 ];
 const noteLabels = ["ド","レ","ミ","ファ","ソ","ラ","シ"];
 const ranges = {
-  beginner:[2,8], intermediate:[2,11], advanced:[0,13]
-};
-let noteState = {};
+  beginner: [7, 13],
+  intermediate: [0, 16],
+  advanced: [4, 18]
+};let noteState = {};
 
 notes.forEach((n,i) => {
   const text = `${n.name}${n.octave}`;
@@ -88,12 +89,22 @@ function drawStaff(svgId, note) {
   for(let i=0;i<5;i++) line(70,baseY-i*gap,530,baseY-i*gap);
   text(92,baseY-22,"𝄞",75);
 
-  for(let s=-1;s<=15;s++) {
-    if(s < 0 || s > 8) {
-      const cy=baseY-s*gap/2;
-      if(Math.abs(s)%2===0 || s===-1) line(x-25,cy,x+25,cy);
-    }
+  const bottomLineStep = 0;
+const topLineStep = 8;
+
+if (note.step < bottomLineStep) {
+  for (let step = -2; step >= note.step; step -= 2) {
+    const ledgerY = baseY - step * gap / 2;
+    line(x - 25, ledgerY, x + 25, ledgerY);
   }
+}
+
+if (note.step > topLineStep) {
+  for (let step = 10; step <= note.step; step += 2) {
+    const ledgerY = baseY - step * gap / 2;
+    line(x - 25, ledgerY, x + 25, ledgerY);
+  }
+}
   const head=document.createElementNS(ns,"ellipse");
   head.setAttribute("cx",x); head.setAttribute("cy",y);
   head.setAttribute("rx",13); head.setAttribute("ry",9);
@@ -166,10 +177,29 @@ $("giveUpNote").onclick=()=>{clearInterval(noteState.timer); finishNote();};
 
 /* リズム */
 const durations = {
-  quarter:{duration:.25,type:"quarter",label:"タン"},
-  half:{duration:.5,type:"half",label:"ターン"},
-  eighth:{duration:.125,type:"eighth",label:"タタ"},
-  sixteenth:{duration:.0625,type:"sixteenth",label:"タカタカ"}
+  quarter: {
+    duration: 0.25,
+    type: "quarter",
+    label: "タン"
+  },
+
+  half: {
+    duration: 0.5,
+    type: "half",
+    label: "ターン"
+  },
+
+  eighth: {
+    duration: 0.125,
+    type: "eighth",
+    label: "タ"
+  },
+
+  sixteenth: {
+    duration: 0.0625,
+    type: "sixteenth",
+    label: "カ"
+  }
 };
 let rhythmState={};
 
@@ -241,7 +271,11 @@ function drawRhythm(pattern) {
     }
   });
 }
-function optionText(p){return p.map(x=>x.label).join(" ");}
+function optionText(pattern) {
+  return pattern.map(function (note) {
+    return note.label;
+  }).join("");
+}
 
 function startRhythmGame() {
   rhythmState={q:0,score:0,combo:0,best:0,correct:0};
